@@ -14,50 +14,28 @@ app.use("/public", express.static(`./public`));
 // app.use("/", express.static(`./views`));
 
 //
-function writeURL(content) {
+function writeData(content) {
   fs.writeFile("./data/database.json", content, "utf8", function (err) {
     if (err) {
       return console.log(err);
     }
-    console.log("The file was saved!");
+    console.log("Data was saved!");
   });
 }
-//database functions
+//database functions/////////////////////////
 let database;
+initDB();
 function initDB() {
-  database = [
-    { idcount: 4 },
-    { shorturl: 1, fullUrl: "https://github.com/Niv200" },
-    { shorturl: 2, fullUrl: "https://google.com" },
-    { shorturl: 3, fullUrl: "https://reddit.com" },
-    { shorturl: 4, fullUrl: "https://ebay.com" },
-  ];
+  getData();
 }
+
 function getData() {
   fs.readFile("./data/database.json", "utf8", function (err, data) {
     if (err) {
       throw err;
     }
-    initDB();
-    processData(data);
+    database = JSON.parse(data);
   });
-}
-
-function processData(data) {
-  // database = JSON.parse(data);
-  // console.log(data[1]);
-  console.log(database);
-  console.log(checkIfExists("https://ebay.com")); //return id 4; -1 if not found
-  console.log(getNewId());
-}
-
-function checkIfExists(url) {
-  for (i in database) {
-    if (database[i].fullUrl === url) {
-      return database[i].shorturl;
-    }
-  }
-  return -1;
 }
 
 function checkIfExists(url) {
@@ -73,14 +51,54 @@ function getNewId() {
   return database[0].idcount + 1;
 }
 
-//
+function addNewLink(url) {
+  database.push(createLinkObj(url));
+  database[0].idcount = getNewId();
+}
+
+function createLinkObj(url, flag) {
+  let obj;
+  if(!flag){
+  obj = { shorturl: getNewId(), fullUrl: url };
+  }else{
+     obj = { shorturl: getIdByLink(url), fullUrl: url };
+  }
+  return obj;
+}
+
+function getIdByLink(url){
+   for (i in database) {
+    if (database[i].fullUrl === url) {
+      return database[i].shorturl;
+    }
+  }
+  return -1;
+}
+
+function saveDatabase() {
+  writeData(JSON.stringify(database));
+}
+
+function getObjById(url) {
+  for (i in database) {
+    if (database[i].fullUrl === url) {
+      return database[i];
+    }
+  }
+  return -1;
+}
+
+////////////////////////////////////////////////
 app.post("/api/shorturl/new", async (req, res) => {
   const fullUrl = req.body.url;
   if (isUrl(fullUrl)) {
-    // res.json({ shorturl: 1, fullUrl });
-    //Write into file
-    // writeURL(JSON.stringify({ shorturl: 1, fullUrl: 1 }));
-    getData();
+    if (checkIfExists(fullUrl) === -1) {
+      addNewLink(fullUrl);
+      saveDatabase();
+      res.json(createLinkObj(fullUrl, true));
+    } else {
+      res.json(getObjById(fullUrl));
+    }
   } else {
     res.json({ error: "URL is not valid!" });
   }
