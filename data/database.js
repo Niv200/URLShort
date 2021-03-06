@@ -1,16 +1,23 @@
-function writeURL(url, jsonObj) {
-  const fs = require("fs");
-  fs.writeFile("./database/database.json", jsonObj, (err) => {
-    if (err) {
-      console.log("Was not able to write into database.json");
-      throw err;
-    }
-    console.log("Data is saved in database.json");
-  });
+class Database {
+  constructor(path) {
+    this.path = path;
+  }
+
+  writeURL(content) {
+    fs.writeFile(this.path, content, "utf8", function (err) {
+      if (err) {
+        return console.log(err);
+      }
+      console.log("The file was saved!");
+    });
+  }
+
+  getData() {
+    fs.readFile(this.path, function (err, data) {
+      if (err) {
+        throw err;
+      }
+      console.log(data);
+    });
+  }
 }
-
-function checkExists(url) {}
-
-function getUrl(url) {}
-
-function createShortUrl(url) {}

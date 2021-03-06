@@ -19,6 +19,16 @@ const PORT = process.env.PORT || 3000;
 //   }
 // }
 
+function isUrl(text) {
+  let url;
+  try {
+    url = new URL(text);
+  } catch (_) {
+    return false;
+  }
+  return url.protocol === "http:" || url.protocol === "https:";
+}
+
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });

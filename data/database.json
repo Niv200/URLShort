@@ -1,1 +1,7 @@
-{ "shorturl": 1, "fullUrl": "https://github.com/Niv200" }
+[
+  { "idcount": 4 },
+  { "shorturl": 1, "fullUrl": "https://github.com/Niv200" },
+  { "shorturl": 2, "fullUrl": "https://google.com" },
+  { "shorturl": 3, "fullUrl": "https://reddit.com" },
+  { "shorturl": 4, "fullUrl": "https://ebay.com" }
+]
