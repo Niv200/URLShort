@@ -1,5 +1,6 @@
 require("dotenv").config();
 const fs = require("fs");
+const fetch = require("node-fetch");
 
 const express = require("express");
 const cors = require("cors");
@@ -58,12 +59,12 @@ function addNewLink(url) {
 
 function createLinkObj(url, flag) {
   let obj;
-  if(!flag){
-  obj = { shorturl: getNewId(), fullUrl: url };
-  }else{
-     obj = { shorturl: getIdByLink(url), fullUrl: url };
-  }
+  obj = { shorturl: getNewId(), fullUrl: url,  "redirectCount":0, "creationDate": getTime()};
   return obj;
+}
+
+function getTime(){
+  return new Date().toISOString().slice(0, 19).replace('T', ' ');
 }
 
 function getIdByLink(url){
@@ -94,8 +95,9 @@ app.post("/api/shorturl/new", async (req, res) => {
   if (isUrl(fullUrl)) {
     if (checkIfExists(fullUrl) === -1) {
       addNewLink(fullUrl);
-      saveDatabase();
-      res.json(createLinkObj(fullUrl, true));
+      res.json(getObjById(fullUrl));
+            saveDatabase();
+
     } else {
       res.json(getObjById(fullUrl));
     }
