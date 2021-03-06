@@ -1,23 +1,81 @@
+const fs = require("fs");
+let database;
+
 class Database {
-  constructor(path) {
-    this.path = path;
+  constructor() {
+    this.initDB = this.initDB();
   }
 
-  writeURL(content) {
-    fs.writeFile(this.path, content, "utf8", function (err) {
+  initDB() {
+    this.getData();
+  }
+  writeData(content) {
+    fs.writeFile("./data/database.json", content, "utf8", function (err) {
       if (err) {
         return console.log(err);
       }
-      console.log("The file was saved!");
+      console.log("Data was saved!");
     });
   }
 
   getData() {
-    fs.readFile(this.path, function (err, data) {
+    fs.readFile("./data/database.json", "utf8", function (err, data) {
       if (err) {
         throw err;
       }
-      console.log(data);
+      database = JSON.parse(data);
     });
   }
+
+  checkIfExists(url) {
+    for (let i in database) {
+      if (database[i].fullUrl === url) {
+        return database[i].shorturl;
+      }
+    }
+    return -1;
+  }
+
+  getNewId() {
+    return database[0].idcount + 1;
+  }
+
+  addNewLink(url) {
+    database.push(this.createLinkObj(url));
+    database[0].idcount = this.getNewId();
+  }
+
+  createLinkObj(url, flag) {
+    let obj;
+    if (!flag) {
+      obj = { shorturl: this.getNewId(), fullUrl: url };
+    } else {
+      obj = { shorturl: this.getIdByLink(url), fullUrl: url };
+    }
+    return obj;
+  }
+
+  getIdByLink(url) {
+    for (let i in database) {
+      if (database[i].fullUrl === url) {
+        return database[i].shorturl;
+      }
+    }
+    return -1;
+  }
+
+  saveDatabase() {
+    this.writeData(JSON.stringify(database));
+  }
+
+  getObjById(url) {
+    for (let i in database) {
+      if (database[i].fullUrl === url) {
+        return database[i];
+      }
+    }
+    return -1;
+  }
 }
+
+module.exports = Database;

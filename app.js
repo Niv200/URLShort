@@ -1,6 +1,8 @@
 require("dotenv").config();
 const fs = require("fs");
 const fetch = require("node-fetch");
+const Database = require("./data/database.js");
+const database = new Database();
 
 const express = require("express");
 const cors = require("cors");
@@ -14,92 +16,15 @@ app.use(express.urlencoded());
 app.use("/public", express.static(`./public`));
 // app.use("/", express.static(`./views`));
 
-//
-function writeData(content) {
-  fs.writeFile("./data/database.json", content, "utf8", function (err) {
-    if (err) {
-      return console.log(err);
-    }
-    console.log("Data was saved!");
-  });
-}
-//database functions/////////////////////////
-let database;
-initDB();
-function initDB() {
-  getData();
-}
-
-function getData() {
-  fs.readFile("./data/database.json", "utf8", function (err, data) {
-    if (err) {
-      throw err;
-    }
-    database = JSON.parse(data);
-  });
-}
-
-function checkIfExists(url) {
-  for (i in database) {
-    if (database[i].fullUrl === url) {
-      return database[i].shorturl;
-    }
-  }
-  return -1;
-}
-
-function getNewId() {
-  return database[0].idcount + 1;
-}
-
-function addNewLink(url) {
-  database.push(createLinkObj(url));
-  database[0].idcount = getNewId();
-}
-
-function createLinkObj(url, flag) {
-  let obj;
-  obj = { shorturl: getNewId(), fullUrl: url,  "redirectCount":0, "creationDate": getTime()};
-  return obj;
-}
-
-function getTime(){
-  return new Date().toISOString().slice(0, 19).replace('T', ' ');
-}
-
-function getIdByLink(url){
-   for (i in database) {
-    if (database[i].fullUrl === url) {
-      return database[i].shorturl;
-    }
-  }
-  return -1;
-}
-
-function saveDatabase() {
-  writeData(JSON.stringify(database));
-}
-
-function getObjById(url) {
-  for (i in database) {
-    if (database[i].fullUrl === url) {
-      return database[i];
-    }
-  }
-  return -1;
-}
-
-////////////////////////////////////////////////
 app.post("/api/shorturl/new", async (req, res) => {
   const fullUrl = req.body.url;
   if (isUrl(fullUrl)) {
-    if (checkIfExists(fullUrl) === -1) {
-      addNewLink(fullUrl);
-      res.json(getObjById(fullUrl));
-            saveDatabase();
-
+    if (database.checkIfExists(fullUrl) === -1) {
+      database.addNewLink(fullUrl);
+      res.json(database.getObjById(fullUrl));
+      database.saveDatabase();
     } else {
-      res.json(getObjById(fullUrl));
+      res.json(database.getObjById(fullUrl));
     }
   } else {
     res.json({ error: "URL is not valid!" });
@@ -121,5 +46,3 @@ app.get("/", (req, res) => {
 });
 
 module.exports = app;
-
-function containURL(urlToCheck) {}
