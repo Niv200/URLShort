@@ -64,13 +64,17 @@ class Database {
     return -1;
   }
 
+  getDataArray() {
+    return this.database;
+  }
+
   saveDatabase() {
     this.writeData(JSON.stringify(database));
   }
 
-  getObjById(url) {
+  getObjById(id) {
     for (let i in database) {
-      if (database[i].fullUrl === url) {
+      if (database[i].shorturl == id) {
         return database[i];
       }
     }

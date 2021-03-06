@@ -41,8 +41,41 @@ function isUrl(text) {
   return url.protocol === "http:" || url.protocol === "https:";
 }
 
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/views/index.html");
+app.get("/:id", (req, res) => {
+  // res.sendFile(__dirname + "/views/index.html");
+  const id = req.params.id.replace(":", "");
+  let obj = database.getObjById(id);
+  if (obj !== -1) {
+    res.redirect(303, obj.fullUrl);
+  }
 });
+
+////////////////////////////////////////////////////////////////
+app.get("/api/statistic/:id", (req, res) => {
+  let obj = database.getObjById(id);
+  const { id } = req.params;
+
+  database
+    .getData()
+    .then((obj) => {
+      const urls = obj;
+      for (const url of urls) {
+        if (url.shortUrl === id) {
+          return res.status(200).send(url);
+        }
+      }
+    })
+    .catch((e) => {
+      return res.status(400).json("Cannot find id");
+    });
+});
+
+app.get("/api/statistics", (req, res) => {
+  let obj = database.getObjById(id);
+  database.getData().then((obj) => {
+    return res.json(obj);
+  });
+});
+////////////////////////////////////////////////////////////////
 
 module.exports = app;
