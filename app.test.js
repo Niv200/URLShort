@@ -2,7 +2,6 @@ const app = require("./app");
 const supertest = require("supertest");
 const request = supertest(app);
 // let nock = require('nock');
-
 // Supertest end points.
 
 describe("Testing endpoints", () => {
@@ -31,45 +30,43 @@ describe("Testing endpoints", () => {
       createdAt: "2021-03-07 00:02:29",
       clicks: 0,
     },
-    {
-      fullUrl: "https://faszfasfsebook.com/",
-      shorturl: "5",
-      createdAt: "2021-03-07 00:02:29",
-      clicks: 0,
-    },
   ];
 
-  // it("Testing accessing to youtube, id = 1", async () => {
-  //   const response = await request.get("/" + expectedOutput[0].shorturl);
-  //   console.log(response.status);
-  //   expect(response.status).toBe(303);
-  // });
-
-  it("Testing stats.", async () => {
+  //First test returns statues 500, server error.
+  it("Testing stats.", async (done) => {
     const response = await request.get("/api/stats");
     console.log(response.status);
-    expect(response.status).toBe(500);
+    expect(response.status).toBe(303);
+    done();
   });
 
-  it("Testing accessing to youtube, id = 1", async () => {
+  it("Testing accessing to youtube, id = 1", async (done) => {
     const response = await request.get("/" + expectedOutput[0].shorturl);
     console.log(response.status);
     expect(response.status).toBe(303);
+    done();
   });
 
-  it("Testing accessing to github, id = 2", async () => {
+  it("Testing accessing to github, id = 2", async (done) => {
     const response = await request.get("/" + expectedOutput[1].shorturl);
     expect(response.status).toBe(303);
+    done();
   });
 
-  it("Testing accessing to reddit, id = 3", async () => {
+  it("Testing accessing to reddit, id = 3", async (done) => {
     const response = await request.get("/" + expectedOutput[2].shorturl);
     expect(response.status).toBe(303);
+    done();
   });
 
-  it("Testing accessing to facebook, id = 4", async () => {
+  it("Testing accessing to facebook, id = 4", async (done) => {
     const response = await request.get("/" + expectedOutput[3].shorturl);
     console.log(response.status);
     expect(response.status).toBe(303);
+    done();
   });
+});
+
+app.listen(3000, () => {
+  console.log("Running jest tests in port 3000");
 });
