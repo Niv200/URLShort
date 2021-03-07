@@ -5,13 +5,15 @@
     <title>URL Shortener</title>
     <link rel="icon" type="image/png" href="../public/favicon.ico" />
     <link href="./public/style.css" rel="stylesheet" type="text/css" />
+    <script src="./main.js"></script>
   </head>
 
   <body>
     <h1>URL Shortener Microservice</h1>
+    <a id="link" target="_blank"></a>
     <main>
       <section>
-        <form action="api/shorturl/new" method="POST">
+        <form onsubmit="return false;">
           <fieldset>
             <legend>URL Shortener</legend>
             <label for="url_input">URL:</label>
@@ -21,10 +23,23 @@
               name="url"
               placeholder="https://www.freecodecamp.org/"
             />
-            <input id="submit" type="submit" value="POST URL" />
+            <input
+              id="submit"
+              type="submit"
+              value="POST URL"
+              onclick="doSubmit()"
+            />
           </fieldset>
         </form>
       </section>
+      <button
+        id="statistic"
+        type="submit"
+        onclick="window.location.replace('/api/stats')"
+      >
+        Statistic
+      </button>
+      <p id="statsparagraph"></p>
     </main>
     <footer>
       <p>By <a href="https://www.freecodecamp.org/">freeCodeCamp</a></p>

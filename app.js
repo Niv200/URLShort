@@ -1,31 +1,35 @@
 require("dotenv").config();
 const fs = require("fs");
-const fetch = require("node-fetch");
-const Database = require("./data/database.js");
-const database = new Database();
-
 const express = require("express");
+const urlExists = require("url-exists");
 const cors = require("cors");
 const { captureRejectionSymbol } = require("events");
 const app = express();
+const Database = require("./data/database.js");
+const database = new Database();
 app.use(cors());
-
 app.use(express.json());
 app.use(express.urlencoded());
 
 app.use("/public", express.static(`./public`));
-// app.use("/", express.static(`./views`));
+app.use(express.static(__dirname + "/views"));
 
 app.post("/api/shorturl/new", async (req, res) => {
   const fullUrl = req.body.url;
   if (isUrl(fullUrl)) {
-    if (database.checkIfExists(fullUrl) === -1) {
-      database.addNewLink(fullUrl);
-      res.json(database.getObjById(fullUrl));
-      database.saveDatabase();
-    } else {
-      res.json(database.getObjByUrl(fullUrl));
-    }
+    urlExists(fullUrl, function (err, exists) {
+      if (exists) {
+        if (database.checkIfExists(fullUrl) === -1) {
+          database.addNewLink(fullUrl);
+          database.saveDatabase();
+          res.json(database.createLinkObj(fullUrl, true));
+        } else {
+          res.json(database.getObjByUrl(fullUrl));
+        }
+      } else {
+        res.json({ message: "Page not found" });
+      }
+    });
   } else {
     res.json({ error: "URL is not valid!" });
   }
@@ -41,8 +45,11 @@ function isUrl(text) {
   return url.protocol === "http:" || url.protocol === "https:";
 }
 
-app.get("/:id", (req, res) => {
+app.get("/", (req, res) => {
   res.sendFile(__dirname + "/views/index.html");
+});
+
+app.get("/:id", (req, res) => {
   const id = req.params.id.replace(":", "");
   let obj = database.getObjById(id);
   if (obj !== -1) {
@@ -50,15 +57,11 @@ app.get("/:id", (req, res) => {
     database.updateClicks(id);
   }
 });
-////////////////////////////////////////////////////////////////
-app.get("/api/statistic/:id", (req, res) => {
-  const { id } = req.params;
-  res.json(database.getObjById(id));
-});
 
-app.get("/api/statistics", (req, res) => {
-  res.json(database.getDatabase());
+app.get("/api/stats", (req, res) => {
+  let data = database.getDatabase();
+  console.log("hey");
+  res.json(303, data);
 });
-////////////////////////////////////////////////////////////////
 
 module.exports = app;

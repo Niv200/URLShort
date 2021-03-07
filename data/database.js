@@ -16,7 +16,6 @@ class Database {
       if (err) {
         return console.log(err);
       }
-      console.log("Data was saved!");
     });
   }
 
@@ -27,6 +26,10 @@ class Database {
       }
       database = JSON.parse(data);
     });
+  }
+
+  saveDatabase() {
+    this.writeData(JSON.stringify(database));
   }
 
   getDatabase() {
@@ -66,7 +69,7 @@ class Database {
         clicks: 0,
       };
     } else {
-      obj = getObjByUrl(url);
+      obj = this.getObjByUrl(url);
     }
     return obj;
   }
@@ -93,6 +96,8 @@ class Database {
     return -1;
   }
 
+  getNewObjByLink(url) {}
+
   getClicks(id) {
     return this.getObjById(id).clicks;
   }
@@ -106,6 +111,15 @@ class Database {
     for (let i in database) {
       if (database[i].fullUrl == url) {
         return database[i];
+      }
+    }
+    return -1;
+  }
+
+  getObjWithoutStats(url) {
+    for (let i in database) {
+      if (database[i].fullUrl == url) {
+        return { shorturl: database[i].shorturl, fullUrl: database[i].fullUrl };
       }
     }
     return -1;
