@@ -6,9 +6,11 @@ class Database {
     this.initDB = this.initDB();
   }
 
+  //Clear init method to allow further updates in the future that require to be initiated.
   initDB() {
     this.getData();
   }
+
   writeData(content) {
     fs.writeFile("./data/database.json", content, "utf8", function (err) {
       if (err) {
@@ -25,6 +27,15 @@ class Database {
       }
       database = JSON.parse(data);
     });
+  }
+
+  getDatabase() {
+    let ids = database[0].idcount;
+    let arr = [];
+    for (let i = 1; i < ids; i++) {
+      arr.push(database[i]);
+    }
+    return arr;
   }
 
   checkIfExists(url) {
@@ -48,9 +59,14 @@ class Database {
   createLinkObj(url, flag) {
     let obj;
     if (!flag) {
-      obj = { shorturl: this.getNewId(), fullUrl: url };
+      obj = {
+        shorturl: this.getNewId(),
+        fullUrl: url,
+        createdAt: new Date(),
+        clicks: 0,
+      };
     } else {
-      obj = { shorturl: this.getIdByLink(url), fullUrl: url };
+      obj = getObjByUrl(url);
     }
     return obj;
   }
@@ -58,7 +74,7 @@ class Database {
   getIdByLink(url) {
     for (let i in database) {
       if (database[i].fullUrl === url) {
-        return database[i].shorturl;
+        return database[i];
       }
     }
     return -1;
@@ -68,13 +84,27 @@ class Database {
     return this.database;
   }
 
-  saveDatabase() {
-    this.writeData(JSON.stringify(database));
-  }
-
   getObjById(id) {
     for (let i in database) {
       if (database[i].shorturl == id) {
+        return database[i];
+      }
+    }
+    return -1;
+  }
+
+  getClicks(id) {
+    return this.getObjById(id).clicks;
+  }
+
+  updateClicks(id) {
+    this.getObjById(id).clicks = this.getClicks(id) + 1;
+    this.saveDatabase();
+  }
+
+  getObjByUrl(url) {
+    for (let i in database) {
+      if (database[i].fullUrl == url) {
         return database[i];
       }
     }

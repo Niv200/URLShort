@@ -1,1 +1,27 @@
-[{"idcount":2},{"shorturl":1,"fullUrl":"https://github.com/Niv200"},{"shorturl":2,"fullUrl":"https://www.youtube.com/"}]
+[
+  { "idcount": 4 },
+  {
+    "shorturl": 1,
+    "fullUrl": "https://stackoverflow.com/",
+    "createdAt": "2021-03-07T08:47:14.554Z",
+    "clicks": 5
+  },
+  {
+    "shorturl": 2,
+    "fullUrl": "https://facebook.com/",
+    "createdAt": "2021-03-07T08:52:45.707Z",
+    "clicks": 2
+  },
+  {
+    "shorturl": 3,
+    "fullUrl": "https://github.com/Niv200",
+    "createdAt": "2021-03-07T09:06:34.112Z",
+    "clicks": 0
+  },
+  {
+    "shorturl": 4,
+    "fullUrl": "https://www.amazon.com/",
+    "createdAt": "2021-03-07T09:20:00.672Z",
+    "clicks": 0
+  }
+]

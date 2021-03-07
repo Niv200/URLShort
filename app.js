@@ -24,7 +24,7 @@ app.post("/api/shorturl/new", async (req, res) => {
       res.json(database.getObjById(fullUrl));
       database.saveDatabase();
     } else {
-      res.json(database.getObjById(fullUrl));
+      res.json(database.getObjByUrl(fullUrl));
     }
   } else {
     res.json({ error: "URL is not valid!" });
@@ -42,39 +42,22 @@ function isUrl(text) {
 }
 
 app.get("/:id", (req, res) => {
-  // res.sendFile(__dirname + "/views/index.html");
+  res.sendFile(__dirname + "/views/index.html");
   const id = req.params.id.replace(":", "");
   let obj = database.getObjById(id);
   if (obj !== -1) {
     res.redirect(303, obj.fullUrl);
+    database.updateClicks(id);
   }
 });
-
 ////////////////////////////////////////////////////////////////
 app.get("/api/statistic/:id", (req, res) => {
-  let obj = database.getObjById(id);
   const { id } = req.params;
-
-  database
-    .getData()
-    .then((obj) => {
-      const urls = obj;
-      for (const url of urls) {
-        if (url.shortUrl === id) {
-          return res.status(200).send(url);
-        }
-      }
-    })
-    .catch((e) => {
-      return res.status(400).json("Cannot find id");
-    });
+  res.json(database.getObjById(id));
 });
 
 app.get("/api/statistics", (req, res) => {
-  let obj = database.getObjById(id);
-  database.getData().then((obj) => {
-    return res.json(obj);
-  });
+  res.json(database.getDatabase());
 });
 ////////////////////////////////////////////////////////////////
 
