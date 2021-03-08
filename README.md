@@ -19,6 +19,8 @@
 - This will show you all the links youve ever shortened, and their IDs
 - It will also show your the amount of times a shortened link was used, and its creation date and time.
 - This can be used to track the activity of the app, and check which links are more popular than others.
+  \
+- alternativly you can visit /api/stats to see all the database and their information.
 
 ## replit
 
