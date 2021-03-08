@@ -60,7 +60,7 @@ app.get("/:id", (req, res) => {
 
 app.get("/api/stats", (req, res) => {
   let data = database.getDatabase();
-  res.json(303, data);
+  res.json(200, data);
 });
 
 module.exports = app;

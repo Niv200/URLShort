@@ -5,11 +5,12 @@
     <title>URL Shortener</title>
     <link rel="icon" type="image/png" href="../public/favicon.ico" />
     <link href="./public/style.css" rel="stylesheet" type="text/css" />
-    <script src="./main.js"></script>
+    <link href="../public/style.scss" rel="stylesheet" type="text/css" />
   </head>
 
   <body>
     <h1>URL Shortener Microservice</h1>
+    <p></p>
     <a id="link" target="_blank"></a>
     <main>
       <section>
@@ -25,6 +26,7 @@
             />
             <input
               id="submit"
+              class="button"
               type="submit"
               value="POST URL"
               onclick="doSubmit()"
@@ -32,12 +34,29 @@
           </fieldset>
         </form>
       </section>
-      <button id="statistic" type="submit" onclick="gotoStats()">
+      <button id="statistic" class="button" type="submit" onclick="gotoStats()">
         Statistic
       </button>
     </main>
+    <div class="tables" id="tables">
+      <h1 class="table-header">Stats</h1>
+      <section id="first-table">
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>ShortUrls</th>
+              <th>FullUrls</th>
+              <th>CreatedAt</th>
+              <th>Clicks</th>
+            </tr>
+          </thead>
+          <tbody id="url-statistic"></tbody>
+        </table>
+      </section>
+    </div>
     <footer>
-      <p>By <a href="https://www.freecodecamp.org/">freeCodeCamp</a></p>
+      <p>By Niv</p>
     </footer>
   </body>
+  <script src="./main.js"></script>
 </html>

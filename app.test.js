@@ -1,7 +1,6 @@
 const app = require("./app");
 const supertest = require("supertest");
 const request = supertest(app);
-// let nock = require('nock');
 // Supertest end points.
 
 describe("Testing endpoints", () => {
@@ -40,26 +39,26 @@ describe("Testing endpoints", () => {
     done();
   });
 
-  it("Testing accessing to youtube, id = 1", async (done) => {
+  it("Testing access to youtube, id = 1", async (done) => {
     const response = await request.get("/" + expectedOutput[0].shorturl);
     console.log(response.status);
     expect(response.status).toBe(303);
     done();
   });
 
-  it("Testing accessing to github, id = 2", async (done) => {
+  it("Testing access to github, id = 2", async (done) => {
     const response = await request.get("/" + expectedOutput[1].shorturl);
     expect(response.status).toBe(303);
     done();
   });
 
-  it("Testing accessing to reddit, id = 3", async (done) => {
+  it("Testing access to reddit, id = 3", async (done) => {
     const response = await request.get("/" + expectedOutput[2].shorturl);
     expect(response.status).toBe(303);
     done();
   });
 
-  it("Testing accessing to facebook, id = 4", async (done) => {
+  it("Testing access to facebook, id = 4", async (done) => {
     const response = await request.get("/" + expectedOutput[3].shorturl);
     console.log(response.status);
     expect(response.status).toBe(303);

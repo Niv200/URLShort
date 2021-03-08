@@ -18,4 +18,31 @@ async function doSubmit() {
   }
 }
 
-function gotoStats() {}
+async function gotoStats() {
+  let response = await fetch("/api/stats", {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  let result = await response.json();
+  if (result) {
+    const divStats = document.getElementById("tables");
+    if (divStats.style.display === "block") {
+      divStats.style.display = "none";
+    } else {
+      divStats.style.display = "block";
+    }
+    const urlsStat = document.getElementById("url-statistic");
+    urlsStat.innerHTML = "";
+    for (let i = 0; i < result.length; i++) {
+      const tableRows = document.createElement("tr");
+      urlsStat.appendChild(tableRows);
+      for (let prop in result[i]) {
+        const tableData = document.createElement("td");
+        tableData.innerText = result[i][prop];
+        tableRows.append(tableData);
+      }
+    }
+  } else if (result == null || result == undefined || result.length == 0) {
+    window.location.href = "/404.html";
+  }
+}
