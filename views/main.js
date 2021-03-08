@@ -46,3 +46,9 @@ async function gotoStats() {
     window.location.href = "/404.html";
   }
 }
+
+function hideStats() {
+  console.log("hey");
+  var x = document.getElementById("first-table");
+  x.innerHTML = "";
+}

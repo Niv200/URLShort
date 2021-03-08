@@ -10,19 +10,27 @@
 
   <body>
     <h1>URL Shortener Microservice</h1>
-    <p></p>
+    <p>
+      This is a URL shortener made by Niv.<br />
+      in order to use it, type in the box the long URL <br />
+      you are wishing to short, then click post <br />
+      the shorten URL will be shown above the text box. <br />
+    </p>
+    <p>
+      You can press the statistics button below to see all the links ever
+      shortened <br />
+      You can also see how many times a link was visited and clicked.
+    </p>
     <a id="link" target="_blank"></a>
     <main>
       <section>
         <form onsubmit="return false;">
-          <fieldset>
-            <legend>URL Shortener</legend>
-            <label for="url_input">URL:</label>
+          <fieldset id="fieldtest">
             <input
               id="url_input"
               type="text"
               name="url"
-              placeholder="https://www.freecodecamp.org/"
+              placeholder="https://www.example.org/"
             />
             <input
               id="submit"
@@ -38,8 +46,8 @@
         Statistic
       </button>
     </main>
+    <a href="https://github.com/Niv200">By Niv</a>
     <div class="tables" id="tables">
-      <h1 class="table-header">Stats</h1>
       <section id="first-table">
         <table class="styled-table">
           <thead>
@@ -54,9 +62,7 @@
         </table>
       </section>
     </div>
-    <footer>
-      <p>By Niv</p>
-    </footer>
+    <footer></footer>
   </body>
   <script src="./main.js"></script>
 </html>
