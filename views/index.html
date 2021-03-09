@@ -5,29 +5,64 @@
     <title>URL Shortener</title>
     <link rel="icon" type="image/png" href="../public/favicon.ico" />
     <link href="./public/style.css" rel="stylesheet" type="text/css" />
+    <link href="../public/style.scss" rel="stylesheet" type="text/css" />
   </head>
 
   <body>
     <h1>URL Shortener Microservice</h1>
+    <p>
+      This is a URL shortener made by Niv.<br />
+      in order to use it, type in the box the long URL <br />
+      you are wishing to short, then click post <br />
+      the shorten URL will be shown above the text box. <br />
+    </p>
+    <p>
+      You can press the statistics button below to see all the links ever
+      shortened <br />
+      You can also see how many times a link was visited and clicked.
+    </p>
+    <a id="link" target="_blank"></a>
     <main>
       <section>
-        <form action="api/shorturl/new" method="POST">
-          <fieldset>
-            <legend>URL Shortener</legend>
-            <label for="url_input">URL:</label>
+        <form onsubmit="return false;">
+          <fieldset id="fieldtest">
             <input
               id="url_input"
               type="text"
               name="url"
-              placeholder="https://www.freecodecamp.org/"
+              placeholder="https://www.example.org/"
             />
-            <input type="submit" value="POST URL" />
+            <input
+              id="submit"
+              class="button"
+              type="submit"
+              value="POST URL"
+              onclick="doSubmit()"
+            />
           </fieldset>
         </form>
       </section>
+      <button id="statistic" class="button" type="submit" onclick="gotoStats()">
+        Statistic
+      </button>
     </main>
-    <footer>
-      <p>By <a href="https://www.freecodecamp.org/">freeCodeCamp</a></p>
-    </footer>
+    <a href="https://github.com/Niv200">By Niv</a>
+    <div class="tables" id="tables">
+      <section id="first-table">
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>ShortUrls</th>
+              <th>FullUrls</th>
+              <th>CreatedAt</th>
+              <th>Clicks</th>
+            </tr>
+          </thead>
+          <tbody id="url-statistic"></tbody>
+        </table>
+      </section>
+    </div>
+    <footer></footer>
   </body>
+  <script src="./main.js"></script>
 </html>
